@@ -1,0 +1,29 @@
+
+library(tokenizers)
+
+##### load the text #####
+post <- read.csv("file", header = F)
+para <- as.character(post$sentence)
+
+
+##### split text to sentence #####
+sentences <- tokenize_sentences(para)
+sentences <- unlist(sentences)
+
+
+##### find the index of sentences included keyword #####
+library(stringr)
+all_sent <- str_match_all(sentences, "KEYWORD") # str_match_all function is used to find all sentences included the KEYWORD
+
+all_sent <- as.matrix(as.character(all_sent)) # change class from 'list' to 'matrix' so that easy to manipulate
+
+
+##### index sentences' number #####
+index_num <- which(all_sent == "KEYWORD") # aimed sentences which include keyword
+index_num_bef <- index_num - 1 # adding one sentences before aim_sentence
+index_num_aft <- index_num + 1 # adding one sentence after aim_sentence
+
+
+##### create new subset with Keyword & adjacent sentences #####
+a <- as.matrix(sentences)
+key_sente <- a[c(index_num, index_num_bef, index_num_aft),] 
